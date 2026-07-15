@@ -179,6 +179,8 @@ body {
   gap: 0.5rem;
   font-weight: 600;
   margin-bottom: 0.4rem;
+  text-decoration: none;
+  color: inherit;
 }
 
 .post-card-avatar {

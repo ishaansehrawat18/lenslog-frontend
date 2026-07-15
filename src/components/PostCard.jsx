@@ -24,7 +24,7 @@ function PostCard({ post }) {
         />
       </Link>
       <div className="post-card-body">
-        <div className="post-card-author">
+        <Link to={`/users/${post.user?.username}`} className="post-card-author">
           <img
             src={resolveImageUrl(post.user?.profileImage)}
             alt={post.user?.username}
@@ -32,7 +32,7 @@ function PostCard({ post }) {
             loading="lazy"
           />
           <span>@{post.user?.username}</span>
-        </div>
+        </Link>
         {post.caption && <p className="post-card-caption">{post.caption}</p>}
         {post.location && <p className="post-card-location">📍 {post.location}</p>}
         <p className="post-card-date">{formattedDate}</p>
@@ -46,6 +46,4 @@ function PostCard({ post }) {
   );
 }
 
-// Memoized so a PostCard only re-renders if its specific `post` prop
-// actually changes — not on every re-render of the parent list (Home/Profile/Search).
 export default memo(PostCard);

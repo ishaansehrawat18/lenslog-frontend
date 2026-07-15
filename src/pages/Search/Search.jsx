@@ -55,7 +55,7 @@ function Search() {
           <h2>Users</h2>
           <div className="search-user-list">
             {results.users.map((user) => (
-              <Link to={`/profile`} key={user._id} className="search-user-item">
+              <Link to={`/users/${user.username}`} key={user._id} className="search-user-item">
                 <img
                   src={resolveImageUrl(user.profileImage)}
                   alt={user.username}
