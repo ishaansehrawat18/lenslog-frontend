@@ -11,9 +11,11 @@ function SearchBar({ onSearch, placeholder = "Search users, captions, locations,
 
   return (
     <div className="relative mx-auto max-w-xl">
-      <SearchIcon size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
+      <label htmlFor="site-search" className="sr-only">{placeholder}</label>
+      <SearchIcon size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" aria-hidden="true" />
       <input
-        type="text"
+        id="site-search"
+        type="search"
         placeholder={placeholder}
         value={query}
         onChange={(e) => setQuery(e.target.value)}

@@ -34,13 +34,16 @@ function LikeButton({ post, currentUserId }) {
     <button
       onClick={handleClick}
       disabled={pending}
-      className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors disabled:opacity-60"
+      aria-pressed={liked}
+      aria-label={liked ? "Unlike this post" : "Like this post"}
+      className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black rounded-lg"
     >
       <motion.span whileTap={{ scale: 1.3 }} className="inline-flex">
         <Heart
           size={22}
           className={liked ? "fill-red-500 text-red-500" : ""}
           strokeWidth={1.8}
+          aria-hidden="true"
         />
       </motion.span>
       <span className="text-sm font-medium">{likesCount}</span>

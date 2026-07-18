@@ -28,6 +28,15 @@ function ImageUploader({ onFileSelect, initialPreview = null, label = "Upload im
 
   return (
     <div
+      role="button"
+      tabIndex={0}
+      aria-label={label}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          inputRef.current?.click();
+        }
+      }}
       onDragOver={(e) => {
         e.preventDefault();
         setDragActive(true);
@@ -35,7 +44,7 @@ function ImageUploader({ onFileSelect, initialPreview = null, label = "Upload im
       onDragLeave={() => setDragActive(false)}
       onDrop={handleDrop}
       onClick={() => inputRef.current?.click()}
-      className={`relative flex cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-colors ${
+      className={`relative flex cursor-pointer flex-col items-center justify-center overflow-hidden rounded-2xl border-2 border-dashed transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black ${
         dragActive ? "border-black bg-gray-50" : "border-gray-200 hover:border-gray-300"
       } ${preview ? "aspect-square" : "aspect-video"}`}
     >

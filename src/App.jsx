@@ -2,6 +2,7 @@ import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { ConfirmProvider } from "./context/ConfirmContext.jsx";
 import Navbar from "./components/Navbar.jsx";
+import MobileNav from "./components/MobileNav.jsx";
 import AppRoutes from "./routes/AppRoutes.jsx";
 
 function App() {
@@ -9,9 +10,10 @@ function App() {
     <AuthProvider>
       <ConfirmProvider>
         <Navbar />
-        <main>
+        <main className="pb-20 lg:pb-0">
           <AppRoutes />
         </main>
+        <MobileNav />
         <Toaster
           position="top-right"
           toastOptions={{

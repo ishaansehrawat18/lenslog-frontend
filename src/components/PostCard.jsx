@@ -29,7 +29,7 @@ function PostCard({ post }) {
       viewport={{ once: true }}
       className="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md"
     >
-      <Link to={`/posts/${post._id}`} className="block overflow-hidden">
+      <Link to={`/posts/${post._id}`} aria-label={`Open post by @${post.user?.username}`} className="block overflow-hidden">
         <img
           src={resolveImageUrl(post.image)}
           alt={post.caption || "Post"}
@@ -66,15 +66,17 @@ function PostCard({ post }) {
           {user && <LikeButton post={post} currentUserId={user._id} />}
           <Link
             to={`/posts/${post._id}`}
-            className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors"
+            aria-label="View comments"
+            className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black rounded-lg"
           >
-            <MessageCircle size={20} strokeWidth={1.8} />
+            <MessageCircle size={20} strokeWidth={1.8} aria-hidden="true" />
           </Link>
           <button
             onClick={handleShare}
-            className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors"
+            aria-label="Copy link to this post"
+            className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black rounded-lg"
           >
-            <Share2 size={20} strokeWidth={1.8} />
+            <Share2 size={20} strokeWidth={1.8} aria-hidden="true" />
           </button>
         </div>
       </div>

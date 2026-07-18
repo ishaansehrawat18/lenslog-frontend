@@ -27,7 +27,9 @@ function CommentBox({ postId, onCommentAdded }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center gap-2 border-t border-gray-100 py-3">
+    <label htmlFor="comment-input" className="sr-only">Add a comment</label>
       <input
+        id="comment-input"
         type="text"
         placeholder="Add a comment..."
         value={text}
@@ -37,9 +39,10 @@ function CommentBox({ postId, onCommentAdded }) {
       <button
         type="submit"
         disabled={submitting}
-        className="flex h-9 w-9 items-center justify-center rounded-full bg-black text-white hover:bg-gray-800 disabled:opacity-60"
+        aria-label="Post comment"
+        className="flex h-9 w-9 items-center justify-center rounded-full bg-black text-white hover:bg-gray-800 disabled:opacity-60 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
       >
-        <Send size={16} />
+        <Send size={16} aria-hidden="true" />
       </button>
     </form>
   );

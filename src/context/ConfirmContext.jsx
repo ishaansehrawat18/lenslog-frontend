@@ -37,6 +37,9 @@ export function ConfirmProvider({ children }) {
             className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm"
           >
             <motion.div
+              role="alertdialog"
+              aria-modal="true"
+              aria-label="Confirm action"
               initial={{ opacity: 0, scale: 0.95, y: 8 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 8 }}
