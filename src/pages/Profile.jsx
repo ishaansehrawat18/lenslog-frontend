@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { getProfile, getMyPosts } from "../services/userService.js";
 import ProfileCard from "../components/ProfileCard.jsx";
 import PostCard from "../components/PostCard.jsx";
-import Loader from "../components/Loader.jsx";
+import { PostCardSkeleton } from "../components/Loader.jsx";
+import { ImageOff } from "lucide-react";
 
 function Profile() {
   const [profile, setProfile] = useState(null);
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -16,8 +16,6 @@ function Profile() {
         const [profileData, postsData] = await Promise.all([getProfile(), getMyPosts()]);
         setProfile(profileData);
         setPosts(postsData);
-      } catch (err) {
-        setError("Could not load your profile. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -25,18 +23,35 @@ function Profile() {
     fetchProfileData();
   }, []);
 
-  if (loading) return <Loader label="Loading profile..." />;
-  if (error) return <p className="error-state">{error}</p>;
-
   return (
-    <div className="profile-page">
-      <ProfileCard user={profile} postCount={posts.length} isOwnProfile />
-
-      <h2>Your Posts</h2>
-      {posts.length === 0 ? (
-        <p className="empty-state">You haven't posted anything yet.</p>
+    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
+      {loading || !profile ? (
+        <div className="mx-auto max-w-md">
+          <div className="h-72 animate-pulse rounded-2xl bg-gray-100" />
+        </div>
       ) : (
-        <div className="post-grid">
+        <ProfileCard user={profile} postCount={posts.length} isOwnProfile />
+      )}
+
+      <h2 className="mb-4 mt-10 text-lg font-bold text-black">Your Posts</h2>
+
+      {loading && (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <PostCardSkeleton key={i} />
+          ))}
+        </div>
+      )}
+
+      {!loading && posts.length === 0 && (
+        <div className="flex flex-col items-center gap-3 py-16 text-gray-400">
+          <ImageOff size={36} strokeWidth={1.3} />
+          <p className="text-sm">You haven't posted anything yet.</p>
+        </div>
+      )}
+
+      {!loading && posts.length > 0 && (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}

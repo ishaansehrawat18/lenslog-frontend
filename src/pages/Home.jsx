@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { getPosts } from "../services/postService.js";
 import PostCard from "../components/PostCard.jsx";
-import Loader from "../components/Loader.jsx";
+import { PostCardSkeleton } from "../components/Loader.jsx";
+import { ImageOff } from "lucide-react";
 
 function Home() {
   const [posts, setPosts] = useState([]);
@@ -22,17 +23,29 @@ function Home() {
     fetchPosts();
   }, []);
 
-  if (loading) return <Loader label="Loading feed..." />;
-  if (error) return <p className="error-state">{error}</p>;
-
   return (
-    <div className="home">
-      <h1>LensLog Feed</h1>
+    <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
+      <h1 className="mb-8 text-2xl font-bold text-black">Your Feed</h1>
 
-      {posts.length === 0 ? (
-        <p className="empty-state">No posts yet — be the first to share a photo!</p>
-      ) : (
-        <div className="post-grid">
+      {loading && (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 6 }).map((_, i) => (
+            <PostCardSkeleton key={i} />
+          ))}
+        </div>
+      )}
+
+      {!loading && error && <p className="py-16 text-center text-sm text-red-500">{error}</p>}
+
+      {!loading && !error && posts.length === 0 && (
+        <div className="flex flex-col items-center gap-3 py-24 text-gray-400">
+          <ImageOff size={40} strokeWidth={1.3} />
+          <p className="text-sm">No posts yet — be the first to share a photo!</p>
+        </div>
+      )}
+
+      {!loading && !error && posts.length > 0 && (
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}

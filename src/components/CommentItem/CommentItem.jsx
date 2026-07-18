@@ -1,35 +1,34 @@
 import { resolveImageUrl } from "../../utils/imageUrl.js";
 import { useConfirm } from "../../hooks/useConfirm.js";
+import { Trash2 } from "lucide-react";
 
-// comment: { _id, user: { _id, username, profileImage }, text, createdAt }
-// currentUserId: logged-in user's _id, to show Delete only for their own comments
-// onDelete: callback invoked with the comment's _id when Delete is confirmed
 function CommentItem({ comment, currentUserId, onDelete }) {
   const confirm = useConfirm();
   const isOwner = currentUserId && comment.user?._id === currentUserId;
 
   const handleDeleteClick = async () => {
     const confirmed = await confirm("Delete this comment?");
-    if (confirmed) {
-      onDelete(comment._id);
-    }
+    if (confirmed) onDelete(comment._id);
   };
 
   return (
-    <div className="comment-item">
+    <div className="flex gap-3 py-2">
       <img
         src={resolveImageUrl(comment.user?.profileImage)}
         alt={comment.user?.username}
-        className="comment-item-avatar"
+        className="h-8 w-8 flex-shrink-0 rounded-full object-cover"
       />
-      <div className="comment-item-body">
-        <p>
-          <span className="comment-item-username">@{comment.user?.username}</span>{" "}
+      <div className="flex-1">
+        <p className="text-sm text-gray-800">
+          <span className="font-semibold text-black">@{comment.user?.username}</span>{" "}
           {comment.text}
         </p>
         {isOwner && (
-          <button className="comment-item-delete" onClick={handleDeleteClick}>
-            Delete
+          <button
+            onClick={handleDeleteClick}
+            className="mt-1 flex items-center gap-1 text-xs text-red-500 hover:text-red-700"
+          >
+            <Trash2 size={12} /> Delete
           </button>
         )}
       </div>

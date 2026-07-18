@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 import { getComments, deleteComment } from "../../services/postService.js";
-import { useToast } from "../../hooks/useToast.js";
 import CommentItem from "../CommentItem/CommentItem.jsx";
 import Loader from "../Loader.jsx";
 
 function CommentList({ postId, currentUserId, refreshKey }) {
-  const { addToast } = useToast();
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -16,9 +14,8 @@ function CommentList({ postId, currentUserId, refreshKey }) {
       try {
         const data = await getComments(postId);
         setComments(data);
-        setError("");
       } catch (err) {
-        setError("Could not load comments.");
+        toast.error("Could not load comments.");
       } finally {
         setLoading(false);
       }
@@ -30,23 +27,20 @@ function CommentList({ postId, currentUserId, refreshKey }) {
     try {
       await deleteComment(commentId);
       setComments((prev) => prev.filter((c) => c._id !== commentId));
-      addToast("Comment deleted.", "success");
+      toast.success("Comment deleted.");
     } catch (err) {
-      const message = err.response?.data?.message || "Could not delete comment.";
-      setError(message);
-      addToast(message, "error");
+      toast.error(err.response?.data?.message || "Could not delete comment.");
     }
   };
 
   if (loading) return <Loader label="Loading comments..." />;
-  if (error) return <p className="error-state">{error}</p>;
 
   if (comments.length === 0) {
-    return <p className="empty-state">No comments yet — be the first to say something!</p>;
+    return <p className="py-6 text-center text-sm text-gray-400">No comments yet — be the first!</p>;
   }
 
   return (
-    <div className="comment-list">
+    <div className="divide-y divide-gray-50">
       {comments.map((comment) => (
         <CommentItem
           key={comment._id}

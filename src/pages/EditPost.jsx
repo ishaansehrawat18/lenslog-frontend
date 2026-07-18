@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+import toast from "react-hot-toast";
 import { getPostById, updatePost } from "../services/postService.js";
-import { useToast } from "../hooks/useToast.js";
 import ImageUploader from "../components/ImageUploader.jsx";
 import Loader from "../components/Loader.jsx";
 import { resolveImageUrl } from "../utils/imageUrl.js";
@@ -9,14 +10,11 @@ import { resolveImageUrl } from "../utils/imageUrl.js";
 function EditPost() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToast } = useToast();
-
   const [imageFile, setImageFile] = useState(null);
   const [currentImage, setCurrentImage] = useState(null);
   const [formValues, setFormValues] = useState({ caption: "", location: "", tags: "" });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -29,7 +27,7 @@ function EditPost() {
         });
         setCurrentImage(data.image);
       } catch (err) {
-        setError("Could not load this post.");
+        toast.error("Could not load this post.");
       } finally {
         setLoading(false);
       }
@@ -37,22 +35,17 @@ function EditPost() {
     fetchPost();
   }, [id]);
 
-  const handleChange = (e) => {
-    setFormValues({ ...formValues, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
     setSaving(true);
     try {
       await updatePost(id, { imageFile, ...formValues });
-      addToast("Post updated!", "success");
+      toast.success("Post updated!");
       navigate(`/posts/${id}`);
     } catch (err) {
-      const message = err.response?.data?.message || "Could not update post.";
-      setError(message);
-      addToast(message, "error");
+      toast.error(err.response?.data?.message || "Could not update post.");
     } finally {
       setSaving(false);
     }
@@ -61,21 +54,21 @@ function EditPost() {
   if (loading) return <Loader label="Loading post..." />;
 
   return (
-    <div className="edit-post-page">
-      <h1>Edit Post</h1>
-      <form onSubmit={handleSubmit} className="post-form">
+    <div className="mx-auto max-w-lg px-4 py-12">
+      <h1 className="mb-8 text-2xl font-bold text-black">Edit Post</h1>
+      <form onSubmit={handleSubmit} className="space-y-4">
         <ImageUploader
           label="Change photo"
           initialPreview={resolveImageUrl(currentImage)}
           onFileSelect={setImageFile}
         />
-
         <input
           type="text"
           name="caption"
           placeholder="Write a caption..."
           value={formValues.caption}
           onChange={handleChange}
+          className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-black focus:bg-white focus:ring-2 focus:ring-black/5"
         />
         <input
           type="text"
@@ -83,6 +76,7 @@ function EditPost() {
           placeholder="Location (optional)"
           value={formValues.location}
           onChange={handleChange}
+          className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-black focus:bg-white focus:ring-2 focus:ring-black/5"
         />
         <input
           type="text"
@@ -90,12 +84,16 @@ function EditPost() {
           placeholder="Tags, comma separated"
           value={formValues.tags}
           onChange={handleChange}
+          className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-black focus:bg-white focus:ring-2 focus:ring-black/5"
         />
-
-        {error && <p className="auth-error">{error}</p>}
-        <button type="submit" disabled={saving}>
+        <motion.button
+          whileTap={{ scale: 0.97 }}
+          type="submit"
+          disabled={saving}
+          className="w-full rounded-xl bg-black py-3 text-sm font-semibold text-white hover:bg-gray-800 disabled:opacity-60"
+        >
           {saving ? "Saving..." : "Save Changes"}
-        </button>
+        </motion.button>
       </form>
     </div>
   );

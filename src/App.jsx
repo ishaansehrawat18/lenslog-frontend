@@ -1,22 +1,33 @@
+import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "./context/AuthContext.jsx";
-import { ToastProvider } from "./context/ToastContext.jsx";
 import { ConfirmProvider } from "./context/ConfirmContext.jsx";
 import Navbar from "./components/Navbar.jsx";
 import AppRoutes from "./routes/AppRoutes.jsx";
-import ToastContainer from "./components/ToastContainer.jsx";
 
 function App() {
   return (
     <AuthProvider>
-      <ToastProvider>
-        <ConfirmProvider>
-          <Navbar />
-          <main>
-            <AppRoutes />
-          </main>
-          <ToastContainer />
-        </ConfirmProvider>
-      </ToastProvider>
+      <ConfirmProvider>
+        <Navbar />
+        <main>
+          <AppRoutes />
+        </main>
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 3500,
+            style: {
+              borderRadius: "12px",
+              background: "#111827",
+              color: "#fff",
+              fontSize: "14px",
+              padding: "12px 16px",
+            },
+            success: { iconTheme: { primary: "#16a34a", secondary: "#fff" } },
+            error: { iconTheme: { primary: "#dc2626", secondary: "#fff" } },
+          }}
+        />
+      </ConfirmProvider>
     </AuthProvider>
   );
 }

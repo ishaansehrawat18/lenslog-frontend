@@ -1,47 +1,46 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { Send } from "lucide-react";
 import { addComment } from "../../services/postService.js";
 
-// postId: which post to comment on
-// onCommentAdded: callback fired after a successful post, so the parent
-// can refresh the CommentList
 function CommentBox({ postId, onCommentAdded }) {
   const [text, setText] = useState("");
-  const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
     if (!text.trim()) {
-      setError("Comment cannot be empty.");
+      toast.error("Comment cannot be empty.");
       return;
     }
-
     setSubmitting(true);
     try {
       await addComment(postId, text.trim());
       setText("");
       onCommentAdded();
     } catch (err) {
-      setError(err.response?.data?.message || "Could not add comment.");
+      toast.error(err.response?.data?.message || "Could not add comment.");
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="comment-box">
+    <form onSubmit={handleSubmit} className="flex items-center gap-2 border-t border-gray-100 py-3">
       <input
         type="text"
         placeholder="Add a comment..."
         value={text}
         onChange={(e) => setText(e.target.value)}
+        className="flex-1 rounded-full border border-gray-200 bg-gray-50 px-4 py-2 text-sm outline-none focus:border-black focus:bg-white"
       />
-      <button type="submit" disabled={submitting}>
-        {submitting ? "Posting..." : "Post"}
+      <button
+        type="submit"
+        disabled={submitting}
+        className="flex h-9 w-9 items-center justify-center rounded-full bg-black text-white hover:bg-gray-800 disabled:opacity-60"
+      >
+        <Send size={16} />
       </button>
-      {error && <p className="auth-error">{error}</p>}
     </form>
   );
 }

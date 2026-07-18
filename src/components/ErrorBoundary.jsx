@@ -1,9 +1,6 @@
 import { Component } from "react";
+import { AlertTriangle } from "lucide-react";
 
-// Error boundaries must be class components — React does not yet
-// provide a hooks equivalent (getDerivedStateFromError / componentDidCatch
-// have no hook version). This catches render-time errors anywhere in its
-// child tree and shows a fallback UI instead of a blank white screen.
 class ErrorBoundary extends Component {
   constructor(props) {
     super(props);
@@ -15,8 +12,6 @@ class ErrorBoundary extends Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    // In a real production app, this is where you'd send the error
-    // to a logging service (e.g. Sentry). For now, log to console.
     console.error("ErrorBoundary caught an error:", error, errorInfo);
   }
 
@@ -27,14 +22,21 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="error-boundary-page">
-          <h1>Something went wrong</h1>
-          <p>We hit an unexpected error. Please try reloading the page.</p>
-          <button onClick={this.handleReload}>Back to Home</button>
+        <div className="flex min-h-[70vh] flex-col items-center justify-center gap-3 px-4 text-center">
+          <AlertTriangle size={36} className="text-gray-300" strokeWidth={1.3} />
+          <h1 className="text-xl font-bold text-black">Something went wrong</h1>
+          <p className="max-w-sm text-sm text-gray-500">
+            We hit an unexpected error. Please try reloading the page.
+          </p>
+          <button
+            onClick={this.handleReload}
+            className="mt-2 rounded-full bg-black px-5 py-2 text-sm font-medium text-white hover:bg-gray-800"
+          >
+            Back to Home
+          </button>
         </div>
       );
     }
-
     return this.props.children;
   }
 }
