@@ -36,10 +36,11 @@ function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-lg">
-      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
+      <div className="relative mx-auto flex max-w-5xl items-center justify-between px-4 py-3 sm:px-6">
+        {/* Centered on mobile, left-aligned on desktop (lg breakpoint) */}
         <Link
           to="/"
-          className="flex items-center gap-2 text-lg font-bold tracking-tight text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black rounded-lg"
+          className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 text-lg font-bold tracking-tight text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black rounded-lg lg:static lg:left-auto lg:translate-x-0"
         >
           <Camera size={22} strokeWidth={2.2} aria-hidden="true" />
           LensLog
