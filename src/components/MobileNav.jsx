@@ -1,7 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Home, Search, PlusSquare, User } from "lucide-react";
-import { useAuth } from "../hooks/useAuth.js";
+import { Home, Search, PlusSquare, Bookmark, User } from "lucide-react";import { useAuth } from "../hooks/useAuth.js";
 
 function MobileNav() {
   const { user } = useAuth();
@@ -9,10 +8,11 @@ function MobileNav() {
 
   if (!user) return null;
 
-  const items = [
+ const items = [
     { to: "/", Icon: Home, label: "Home" },
     { to: "/search", Icon: Search, label: "Search" },
     { to: "/posts/new", Icon: PlusSquare, label: "Create" },
+    { to: "/saved", Icon: Bookmark, label: "Saved" },
     { to: "/profile", Icon: User, label: "Profile" },
   ];
 

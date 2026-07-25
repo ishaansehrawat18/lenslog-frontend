@@ -1,7 +1,8 @@
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Home, Search, PlusSquare, User, LogOut, Camera } from "lucide-react";
+import { Home, Search, PlusSquare, Bookmark, MessageCircle, User, LogOut, Camera, ShieldCheck } from "lucide-react";
 import { useAuth } from "../hooks/useAuth.js";
+import NotificationBell from "./NotificationBell/NotificationBell.jsx";
 
 function Navbar() {
   const { user, logout } = useAuth();
@@ -53,21 +54,33 @@ function Navbar() {
           {user && (
             <>
               {navItem("/posts/new", PlusSquare, "Create")}
+              {navItem("/saved", Bookmark, "Saved")}
               {navItem("/profile", User, "Profile")}
+              {user.role === "admin" && navItem("/admin", ShieldCheck, "Admin")}
             </>
           )}
         </div>
 
         <div className="flex items-center gap-2">
           {user ? (
-            <button
-              onClick={handleLogout}
-              aria-label="Log out"
-              className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-red-600 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-            >
-              <LogOut size={18} strokeWidth={1.8} aria-hidden="true" />
-              <span className="hidden sm:inline">Logout</span>
-            </button>
+            <>
+              <Link
+                to="/messages"
+                aria-label="Messages"
+                className="flex items-center justify-center rounded-full p-2 text-gray-500 hover:bg-gray-100 hover:text-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+              >
+                <MessageCircle size={20} strokeWidth={1.8} />
+              </Link>
+              <NotificationBell />
+              <button
+                onClick={handleLogout}
+                aria-label="Log out"
+                className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-red-600 transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+              >
+                <LogOut size={18} strokeWidth={1.8} aria-hidden="true" />
+                <span className="hidden sm:inline">Logout</span>
+              </button>
+            </>
           ) : (
             <div className="flex items-center gap-2">
               <Link

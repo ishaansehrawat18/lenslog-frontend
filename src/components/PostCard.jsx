@@ -2,6 +2,7 @@ import { memo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { MessageCircle, Share2, MapPin } from "lucide-react";
+import BookmarkButton from "./BookmarkButton/BookmarkButton.jsx";
 import { resolveImageUrl } from "../utils/imageUrl.js";
 import { useAuth } from "../hooks/useAuth.js";
 import LikeButton from "./LikeButton/LikeButton.jsx";
@@ -62,22 +63,29 @@ function PostCard({ post }) {
 
         <p className="mt-1 text-[11px] text-gray-300">{formattedDate}</p>
 
-        <div className="mt-3 flex items-center gap-4 border-t border-gray-50 pt-3">
-          {user && <LikeButton post={post} currentUserId={user._id} />}
-          <Link
-            to={`/posts/${post._id}`}
-            aria-label="View comments"
-            className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black rounded-lg"
-          >
-            <MessageCircle size={20} strokeWidth={1.8} aria-hidden="true" />
-          </Link>
-          <button
-            onClick={handleShare}
-            aria-label="Copy link to this post"
-            className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black rounded-lg"
-          >
-            <Share2 size={20} strokeWidth={1.8} aria-hidden="true" />
-          </button>
+       <div className="mt-3 flex items-center justify-between border-t border-gray-50 pt-3">
+          <div className="flex items-center gap-4">
+            {user && <LikeButton post={post} currentUserId={user._id} />}
+            <Link
+              to={`/posts/${post._id}`}
+              aria-label="View comments"
+              className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black rounded-lg"
+            >
+              <MessageCircle size={20} strokeWidth={1.8} aria-hidden="true" />
+            </Link>
+            <button
+              onClick={handleShare}
+              aria-label="Copy link to this post"
+              className="flex items-center gap-1.5 text-gray-700 hover:text-black transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black rounded-lg"
+            >
+              <Share2 size={20} strokeWidth={1.8} aria-hidden="true" />
+            </button>
+          </div>{user && (
+            <BookmarkButton
+              postId={post._id}
+              initiallyBookmarked={post.forceBookmarked || !!user.bookmarks?.includes(post._id)}
+            />
+          )}
         </div>
       </div>
     </motion.div>

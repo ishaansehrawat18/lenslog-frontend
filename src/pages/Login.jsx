@@ -98,20 +98,27 @@ function Login() {
           <form onSubmit={handleSubmit} className="mt-8 space-y-4">
             <FloatingInput
               id="email"
-              label="Email"
-              type="email"
+              label="Email or Username"
+              type="text"
               value={formValues.email}
               onChange={handleChange}
             />
-            <FloatingInput
-              id="password"
-              label="Password"
-              value={formValues.password}
-              onChange={handleChange}
-              showToggle
-              visible={showPassword}
-              onToggle={() => setShowPassword((v) => !v)}
-            />
+            <div>
+              <FloatingInput
+                id="password"
+                label="Password"
+                value={formValues.password}
+                onChange={handleChange}
+                showToggle
+                visible={showPassword}
+                onToggle={() => setShowPassword((v) => !v)}
+              />
+              <div className="mt-2 text-right">
+                <Link to="/forgot-password" className="text-xs font-medium text-blue-600 hover:underline">
+                  Forgot password?
+                </Link>
+              </div>
+            </div>
 
             <motion.button
               whileTap={{ scale: 0.97 }}

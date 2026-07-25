@@ -24,3 +24,49 @@ export const getMyPosts = async () => {
   const { data } = await api.get("/api/users/profile/posts");
   return data;
 };
+
+// ---------- Phase 6: Follow System ----------
+
+export const followUser = async (userId) => {
+  const { data } = await api.post(`/api/users/${userId}/follow`);
+  return data;
+};
+
+export const unfollowUser = async (userId) => {
+  const { data } = await api.post(`/api/users/${userId}/unfollow`);
+  return data;
+};
+
+export const getFollowers = async (userId) => {
+  const { data } = await api.get(`/api/users/${userId}/followers`);
+  return data;
+};
+
+export const getFollowing = async (userId) => {
+  const { data } = await api.get(`/api/users/${userId}/following`);
+  return data;
+};
+
+// ---------- Phase 6: Bookmarks ----------
+
+export const addBookmark = async (postId) => {
+  const { data } = await api.post(`/api/posts/${postId}/bookmark`);
+  return data;
+};
+
+export const removeBookmark = async (postId) => {
+  const { data } = await api.delete(`/api/posts/${postId}/bookmark`);
+  return data;
+};
+
+export const getBookmarks = async () => {
+  const { data } = await api.get("/api/users/bookmarks");
+  return data;
+};
+
+// ---------- Phase 6: User Suggestions ----------
+
+export const getSuggestedUsers = async () => {
+  const { data } = await api.get("/api/users/suggestions");
+  return data;
+};

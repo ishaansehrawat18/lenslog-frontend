@@ -72,7 +72,7 @@ function Search() {
       {!loading && results.posts.length > 0 && (
         <div className="mt-8">
           <h2 className="mb-3 text-sm font-semibold text-gray-500">Posts</h2>
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mx-auto flex max-w-md flex-col gap-8">
             {results.posts.map((post) => (
               <PostCard key={post._id} post={post} />
             ))}

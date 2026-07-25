@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { MessageCircle } from "lucide-react";
 import api from "../services/api.js";
 import ProfileCard from "../components/ProfileCard.jsx";
 import PostCard from "../components/PostCard.jsx";
@@ -9,6 +10,7 @@ import { ImageOff } from "lucide-react";
 
 function UserProfile() {
   const { username } = useParams();
+  const navigate = useNavigate();
   const { user: loggedInUser } = useAuth();
   const [profileUser, setProfileUser] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -38,9 +40,30 @@ function UserProfile() {
 
   const isOwnProfile = loggedInUser && loggedInUser.username === profileUser.username;
 
+  const handleMessageClick = () => {
+    navigate(`/messages/${profileUser._id}`, { state: { otherUser: profileUser } });
+  };
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
-      <ProfileCard user={profileUser} postCount={posts.length} isOwnProfile={isOwnProfile} />
+      <ProfileCard
+        user={profileUser}
+        postCount={posts.length}
+        isOwnProfile={isOwnProfile}
+        currentUserId={loggedInUser?._id}
+      />
+
+      {!isOwnProfile && loggedInUser && (
+        <div className="mt-4 flex justify-center">
+          <button
+            onClick={handleMessageClick}
+            className="flex items-center gap-2 rounded-full border border-gray-200 px-5 py-2 text-sm font-medium text-black hover:bg-gray-50"
+          >
+            <MessageCircle size={16} />
+            Message
+          </button>
+        </div>
+      )}
 
       <h2 className="mb-4 mt-10 text-lg font-bold text-black">Posts</h2>
       {posts.length === 0 ? (
@@ -49,7 +72,7 @@ function UserProfile() {
           <p className="text-sm">This user hasn't posted anything yet.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto flex max-w-md flex-col gap-8">
           {posts.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}

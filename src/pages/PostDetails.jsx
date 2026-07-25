@@ -7,7 +7,7 @@ import { useAuth } from "../hooks/useAuth.js";
 import { useConfirm } from "../hooks/useConfirm.js";
 import Loader from "../components/Loader.jsx";
 import LikeButton from "../components/LikeButton/LikeButton.jsx";
-import CommentBox from "../components/CommentBox/CommentBox.jsx";
+import BookmarkButton from "../components/BookmarkButton/BookmarkButton.jsx";import CommentBox from "../components/CommentBox/CommentBox.jsx";
 import CommentList from "../components/CommentList/CommentList.jsx";
 import { resolveImageUrl } from "../utils/imageUrl.js";
 
@@ -87,8 +87,14 @@ function PostDetails() {
           )}
           <p className="mt-1 text-[11px] text-gray-300">{formattedDate}</p>
 
-          <div className="mt-4 flex items-center gap-4 border-t border-gray-50 pt-4">
+         <div className="mt-4 flex items-center justify-between border-t border-gray-50 pt-4">
             {user && <LikeButton post={post} currentUserId={user._id} />}
+            {user && (
+              <BookmarkButton
+                postId={post._id}
+                initiallyBookmarked={!!user.bookmarks?.includes(post._id)}
+              />
+            )}
           </div>
 
           {isOwner && (

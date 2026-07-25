@@ -2,9 +2,12 @@ import { useState, useEffect } from "react";
 import { getPosts } from "../services/postService.js";
 import PostCard from "../components/PostCard.jsx";
 import { PostCardSkeleton } from "../components/Loader.jsx";
+import SuggestedUsers from "../components/SuggestedUsers/SuggestedUsers.jsx";
+import { useAuth } from "../hooks/useAuth.js";
 import { ImageOff } from "lucide-react";
 
 function Home() {
+  const { user } = useAuth();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -27,9 +30,11 @@ function Home() {
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
       <h1 className="mb-8 text-2xl font-bold text-black">Your Feed</h1>
 
+      {user && <SuggestedUsers />}
+
       {loading && (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {Array.from({ length: 6 }).map((_, i) => (
+        <div className="mx-auto flex max-w-md flex-col gap-8">
+          {Array.from({ length: 3 }).map((_, i) => (
             <PostCardSkeleton key={i} />
           ))}
         </div>
@@ -45,7 +50,7 @@ function Home() {
       )}
 
       {!loading && !error && posts.length > 0 && (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto flex max-w-md flex-col gap-8">
           {posts.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}

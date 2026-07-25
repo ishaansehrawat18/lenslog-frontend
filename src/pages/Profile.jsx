@@ -30,13 +30,12 @@ function Profile() {
           <div className="h-72 animate-pulse rounded-2xl bg-gray-100" />
         </div>
       ) : (
-        <ProfileCard user={profile} postCount={posts.length} isOwnProfile />
-      )}
+<ProfileCard user={profile} postCount={posts.length} isOwnProfile currentUserId={profile._id} />      )}
 
       <h2 className="mb-4 mt-10 text-lg font-bold text-black">Your Posts</h2>
 
       {loading && (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto flex max-w-md flex-col gap-8">
           {Array.from({ length: 3 }).map((_, i) => (
             <PostCardSkeleton key={i} />
           ))}
@@ -51,7 +50,7 @@ function Profile() {
       )}
 
       {!loading && posts.length > 0 && (
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto flex max-w-md flex-col gap-8">
           {posts.map((post) => (
             <PostCard key={post._id} post={post} />
           ))}
