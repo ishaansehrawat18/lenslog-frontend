@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { getPosts } from "../services/postService.js";
 import PostCard from "../components/PostCard.jsx";
 import { PostCardSkeleton } from "../components/Loader.jsx";
@@ -9,22 +9,64 @@ import { ImageOff } from "lucide-react";
 function Home() {
   const { user } = useAuth();
   const [posts, setPosts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const [loading, setLoading] = useState(true); // initial full-page load
+  const [loadingMore, setLoadingMore] = useState(false); // subsequent pages
   const [error, setError] = useState("");
+  const sentinelRef = useRef(null);
 
+  // Load the first page once on mount
   useEffect(() => {
-    const fetchPosts = async () => {
+    const fetchFirstPage = async () => {
       try {
-        const data = await getPosts();
-        setPosts(data);
+        const data = await getPosts(1);
+        setPosts(data.posts);
+        setHasMore(data.hasMore);
+        setPage(1);
       } catch (err) {
         setError("Could not load the feed. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
-    fetchPosts();
+    fetchFirstPage();
   }, []);
+
+  const loadNextPage = useCallback(async () => {
+    if (loadingMore || !hasMore) return;
+    setLoadingMore(true);
+    try {
+      const nextPage = page + 1;
+      const data = await getPosts(nextPage);
+      setPosts((prev) => [...prev, ...data.posts]);
+      setHasMore(data.hasMore);
+      setPage(nextPage);
+    } catch (err) {
+      // Silently stop trying further pages on error — the feed the
+      // user already has stays intact and usable.
+      setHasMore(false);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [page, hasMore, loadingMore]);
+
+  // Watch the sentinel element — when it scrolls into view, load more.
+  useEffect(() => {
+    if (!sentinelRef.current || loading) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadNextPage();
+        }
+      },
+      { rootMargin: "200px" } // start loading a bit before it's fully visible
+    );
+
+    observer.observe(sentinelRef.current);
+    return () => observer.disconnect();
+  }, [loading, loadNextPage]);
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
@@ -55,6 +97,19 @@ function Home() {
             <PostCard key={post._id} post={post} />
           ))}
         </div>
+      )}
+
+      {/* Invisible sentinel — triggers loading the next page when scrolled into view */}
+      <div ref={sentinelRef} className="h-1" />
+
+      {loadingMore && (
+        <div className="mx-auto mt-4 max-w-md">
+          <PostCardSkeleton />
+        </div>
+      )}
+
+      {!loading && !hasMore && posts.length > 0 && (
+        <p className="py-8 text-center text-xs text-gray-300">You're all caught up.</p>
       )}
     </div>
   );

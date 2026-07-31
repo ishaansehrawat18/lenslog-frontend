@@ -1,7 +1,9 @@
 import api from "./api.js";
 
-export const getPosts = async () => {
-  const { data } = await api.get("/api/posts");
+// Returns { posts, hasMore, page }. Defaults match the backend's
+// defaults (page 1, 9 per page) but can be overridden for infinite scroll.
+export const getPosts = async (page = 1, limit = 9) => {
+  const { data } = await api.get("/api/posts", { params: { page, limit } });
   return data;
 };
 
