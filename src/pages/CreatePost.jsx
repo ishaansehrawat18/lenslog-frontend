@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Sparkles } from "lucide-react";
 import toast from "react-hot-toast";
 import { createPost } from "../services/postService.js";
+import { suggestCaption } from "../services/aiService.js";
 import ImageUploader from "../components/ImageUploader.jsx";
 
 function CreatePost() {
@@ -10,8 +12,26 @@ function CreatePost() {
   const [imageFile, setImageFile] = useState(null);
   const [formValues, setFormValues] = useState({ caption: "", location: "", tags: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [suggesting, setSuggesting] = useState(false);
 
   const handleChange = (e) => setFormValues({ ...formValues, [e.target.name]: e.target.value });
+
+  const handleSuggestCaption = async () => {
+    if (!imageFile) {
+      toast.error("Choose a photo first.");
+      return;
+    }
+    setSuggesting(true);
+    try {
+      const caption = await suggestCaption(imageFile);
+      setFormValues((prev) => ({ ...prev, caption }));
+      toast.success("Caption suggested!");
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Could not suggest a caption right now.");
+    } finally {
+      setSuggesting(false);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -37,16 +57,30 @@ function CreatePost() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <ImageUploader label="Choose a photo" onFileSelect={setImageFile} />
 
-        <input
-          type="text"
-          name="caption"
-          placeholder="Write a caption..."
-          value={formValues.caption}
-          onChange={handleChange}
-          maxLength={280}
-          className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-black focus:bg-white focus:ring-2 focus:ring-black/5"
-        />
-        <p className="-mt-2 text-right text-xs text-gray-400">{formValues.caption.length}/280</p>
+        <div>
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-medium text-gray-500">Caption</label>
+            <button
+              type="button"
+              onClick={handleSuggestCaption}
+              disabled={suggesting || !imageFile}
+              className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:underline disabled:cursor-not-allowed disabled:text-gray-300 disabled:no-underline"
+            >
+              <Sparkles size={12} />
+              {suggesting ? "Thinking..." : "Suggest Caption"}
+            </button>
+          </div>
+          <input
+            type="text"
+            name="caption"
+            placeholder="Write a caption..."
+            value={formValues.caption}
+            onChange={handleChange}
+            maxLength={280}
+            className="mt-1 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-sm outline-none focus:border-black focus:bg-white focus:ring-2 focus:ring-black/5"
+          />
+          <p className="mt-1 text-right text-xs text-gray-400">{formValues.caption.length}/280</p>
+        </div>
 
         <input
           type="text"

@@ -4,6 +4,7 @@ import { MessageCircle } from "lucide-react";
 import { getConversations } from "../../services/messageService.js";
 import { resolveImageUrl } from "../../utils/imageUrl.js";
 import Loader from "../../components/Loader.jsx";
+import Avatar from "../../components/Avatar.jsx";
 
 function timeAgo(dateString) {
   const seconds = Math.floor((Date.now() - new Date(dateString)) / 1000);
@@ -52,11 +53,8 @@ function Messages() {
               to={`/messages/${conv.user._id}`}
               className="flex items-center gap-3 rounded-xl p-3 hover:bg-gray-50"
             >
-              <img
-                src={resolveImageUrl(conv.user.profileImage)}
-                alt={conv.user.username}
-                className="h-12 w-12 rounded-full object-cover"
-              />
+              <Avatar src={resolveImageUrl(conv.user.profileImage)} alt={conv.user.username} size={48} />
+
               <div className="min-w-0 flex-1">
                 <p className="text-sm font-semibold text-black">{conv.user.name}</p>
                 <p className="truncate text-xs text-gray-400">{conv.lastMessage.text}</p>

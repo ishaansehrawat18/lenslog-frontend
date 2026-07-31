@@ -1,21 +1,21 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { resolveImageUrl } from "../utils/imageUrl.js";
+import Avatar from "./Avatar.jsx";
 import FollowButton from "./FollowButton/FollowButton.jsx";
 import FollowListModal from "./FollowListModal/FollowListModal.jsx";
 
-// isOwnProfile: shows "Edit Profile" instead of a Follow button
-// currentUserId: needed by FollowButton to check current follow state
 function ProfileCard({ user, postCount = 0, isOwnProfile = false, currentUserId }) {
   const [followersCount, setFollowersCount] = useState(user.followers?.length || 0);
-  const [modalMode, setModalMode] = useState(null); // "followers" | "following" | null
+  const [modalMode, setModalMode] = useState(null);
 
   return (
     <div className="flex flex-col items-center rounded-2xl border border-gray-100 bg-white px-6 py-10 text-center shadow-sm">
-      <img
+      <Avatar
         src={resolveImageUrl(user.profileImage)}
         alt={user.username}
-        className="h-28 w-28 rounded-full border-4 border-white object-cover shadow-md"
+        size={112}
+        className="border-4 border-white shadow-md"
       />
       <h2 className="mt-4 text-lg font-bold text-black">{user.name}</h2>
       <p className="text-sm text-gray-400">@{user.username}</p>

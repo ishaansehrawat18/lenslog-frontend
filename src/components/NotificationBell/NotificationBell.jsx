@@ -8,6 +8,7 @@ import {
   deleteNotification,
 } from "../../services/notificationService.js";
 import { resolveImageUrl } from "../../utils/imageUrl.js";
+import Avatar from "../Avatar.jsx";
 
 const ICONS = {
   follow: UserPlus,
@@ -146,10 +147,10 @@ function NotificationBell() {
                       !notification.isRead ? "bg-blue-50/50" : ""
                     }`}
                   >
-                    <img
+                    <Avatar
                       src={resolveImageUrl(notification.sender?.profileImage)}
                       alt=""
-                      className="h-9 w-9 flex-shrink-0 rounded-full object-cover"
+                      size={36}
                     />
                     <div className="min-w-0 flex-1">
                       <p className="text-sm text-gray-800">

@@ -6,6 +6,7 @@ import SearchBar from "../../components/SearchBar/SearchBar.jsx";
 import PostCard from "../../components/PostCard.jsx";
 import Loader from "../../components/Loader.jsx";
 import { resolveImageUrl } from "../../utils/imageUrl.js";
+import Avatar from "../../components/Avatar.jsx";
 
 function Search() {
   const [results, setResults] = useState({ users: [], posts: [] });
@@ -54,11 +55,7 @@ function Search() {
                 key={user._id}
                 className="flex items-center gap-3 rounded-xl border border-gray-100 p-3 hover:bg-gray-50"
               >
-                <img
-                  src={resolveImageUrl(user.profileImage)}
-                  alt={user.username}
-                  className="h-11 w-11 rounded-full object-cover"
-                />
+                <Avatar src={resolveImageUrl(user.profileImage)} alt={user.username} size={44} />
                 <div>
                   <p className="text-sm font-semibold text-black">{user.name}</p>
                   <p className="text-xs text-gray-400">@{user.username}</p>

@@ -7,6 +7,7 @@ import { useAuth } from "../../hooks/useAuth.js";
 import { useSocket } from "../../hooks/useSocket.js";
 import { resolveImageUrl } from "../../utils/imageUrl.js";
 import Loader from "../../components/Loader.jsx";
+import Avatar from "../../components/Avatar.jsx";
 
 function ChatThread() {
   const { userId } = useParams();
@@ -87,13 +88,7 @@ function ChatThread() {
         <Link to="/messages" className="text-gray-400 hover:text-black">
           <ArrowLeft size={20} />
         </Link>
-        {otherUser?.profileImage !== undefined && (
-          <img
-            src={resolveImageUrl(otherUser?.profileImage)}
-            alt=""
-            className="h-9 w-9 rounded-full object-cover"
-          />
-        )}
+        {otherUser && <Avatar src={resolveImageUrl(otherUser?.profileImage)} alt="" size={36} />}
         <p className="text-sm font-semibold text-black">
           {otherUser?.username ? `@${otherUser.username}` : "Conversation"}
         </p>

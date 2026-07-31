@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { getSuggestedUsers, followUser } from "../../services/userService.js";
 import { resolveImageUrl } from "../../utils/imageUrl.js";
+import Avatar from "../Avatar.jsx";
 
 function SuggestedUsers() {
   const [users, setUsers] = useState([]);
@@ -22,7 +23,6 @@ function SuggestedUsers() {
   }, []);
 
   const handleFollow = async (userId) => {
-    // Optimistic — mark as followed immediately
     setFollowedIds((prev) => [...prev, userId]);
     try {
       await followUser(userId);
@@ -32,7 +32,6 @@ function SuggestedUsers() {
     }
   };
 
-  // Don't render the whole section if there's nothing to suggest
   if (!loading && users.length === 0) return null;
 
   return (
@@ -55,11 +54,7 @@ function SuggestedUsers() {
                 className="flex w-28 flex-shrink-0 flex-col items-center gap-2 rounded-2xl border border-gray-100 bg-white p-3 text-center shadow-sm"
               >
                 <Link to={`/users/${user.username}`}>
-                  <img
-                    src={resolveImageUrl(user.profileImage)}
-                    alt={user.username}
-                    className="h-14 w-14 rounded-full object-cover"
-                  />
+                  <Avatar src={resolveImageUrl(user.profileImage)} alt={user.username} size={56} />
                 </Link>
                 <div className="w-full">
                   <p className="truncate text-xs font-semibold text-black">{user.name}</p>

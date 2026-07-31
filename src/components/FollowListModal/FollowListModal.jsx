@@ -5,6 +5,7 @@ import { X } from "lucide-react";
 import { getFollowers, getFollowing } from "../../services/userService.js";
 import { resolveImageUrl } from "../../utils/imageUrl.js";
 import Loader from "../Loader.jsx";
+import Avatar from "../Avatar.jsx";
 
 // mode: "followers" | "following"
 function FollowListModal({ userId, mode, onClose }) {
@@ -67,11 +68,7 @@ function FollowListModal({ userId, mode, onClose }) {
                   onClick={onClose}
                   className="flex items-center gap-3 rounded-xl p-2.5 hover:bg-gray-50"
                 >
-                  <img
-                    src={resolveImageUrl(user.profileImage)}
-                    alt={user.username}
-                    className="h-10 w-10 rounded-full object-cover"
-                  />
+                  <Avatar src={resolveImageUrl(user.profileImage)} alt={user.username} size={40} />
                   <div>
                     <p className="text-sm font-semibold text-black">{user.name}</p>
                     <p className="text-xs text-gray-400">@{user.username}</p>

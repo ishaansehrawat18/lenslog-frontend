@@ -4,6 +4,7 @@ import { ConfirmProvider } from "./context/ConfirmContext.jsx";
 import { SocketProvider } from "./context/SocketContext.jsx";
 import Navbar from "./components/Navbar.jsx";
 import MobileNav from "./components/MobileNav.jsx";
+import AIChatWidget from "./components/AIChatWidget/AIChatWidget.jsx";
 import AppRoutes from "./routes/AppRoutes.jsx";
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
             <AppRoutes />
           </main>
           <MobileNav />
+          <AIChatWidget />
           <Toaster
             position="top-right"
             toastOptions={{
