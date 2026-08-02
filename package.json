@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^9.122.0",
+    "@react-three/fiber": "^8.18.0",
     "@tailwindcss/vite": "^4.3.3",
     "axios": "^1.7.4",
     "framer-motion": "^12.42.2",
@@ -18,7 +20,8 @@
     "react-dom": "^18.3.1",
     "react-hot-toast": "^2.6.0",
     "react-router-dom": "^6.26.1",
-    "socket.io-client": "^4.8.3"
+    "socket.io-client": "^4.8.3",
+    "three": "^0.160.1"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

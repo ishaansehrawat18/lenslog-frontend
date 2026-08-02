@@ -7,7 +7,8 @@ import { useAuth } from "../hooks/useAuth.js";
 import { useConfirm } from "../hooks/useConfirm.js";
 import Loader from "../components/Loader.jsx";
 import LikeButton from "../components/LikeButton/LikeButton.jsx";
-import BookmarkButton from "../components/BookmarkButton/BookmarkButton.jsx";import CommentBox from "../components/CommentBox/CommentBox.jsx";
+import BookmarkButton from "../components/BookmarkButton/BookmarkButton.jsx";
+import CommentBox from "../components/CommentBox/CommentBox.jsx";
 import CommentList from "../components/CommentList/CommentList.jsx";
 import { resolveImageUrl } from "../utils/imageUrl.js";
 
@@ -58,6 +59,7 @@ function PostDetails() {
   if (!post) return null;
 
   const isOwner = user && post.user?._id === user._id;
+  const isVideo = post.mediaType === "video";
   const formattedDate = new Date(post.createdAt).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -67,7 +69,16 @@ function PostDetails() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-10">
       <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-        <img src={resolveImageUrl(post.image)} alt={post.caption} className="w-full object-cover" />
+        {isVideo ? (
+          <video
+            src={resolveImageUrl(post.image)}
+            className="w-full bg-black"
+            controls
+            playsInline
+          />
+        ) : (
+          <img src={resolveImageUrl(post.image)} alt={post.caption} className="w-full object-cover" />
+        )}
 
         <div className="p-5">
           <Link
@@ -87,7 +98,7 @@ function PostDetails() {
           )}
           <p className="mt-1 text-[11px] text-gray-300">{formattedDate}</p>
 
-         <div className="mt-4 flex items-center justify-between border-t border-gray-50 pt-4">
+          <div className="mt-4 flex items-center justify-between border-t border-gray-50 pt-4">
             {user && <LikeButton post={post} currentUserId={user._id} />}
             {user && (
               <BookmarkButton

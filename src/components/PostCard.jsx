@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { MessageCircle, Share2, MapPin } from "lucide-react";
+import { MessageCircle, Share2, MapPin, Play } from "lucide-react";
 import BookmarkButton from "./BookmarkButton/BookmarkButton.jsx";
 import Avatar from "./Avatar.jsx";
 import { resolveImageUrl } from "../utils/imageUrl.js";
@@ -10,6 +10,7 @@ import LikeButton from "./LikeButton/LikeButton.jsx";
 
 function PostCard({ post }) {
   const { user } = useAuth();
+  const isVideo = post.mediaType === "video";
 
   const formattedDate = new Date(post.createdAt).toLocaleDateString("en-US", {
     year: "numeric",
@@ -31,13 +32,34 @@ function PostCard({ post }) {
       viewport={{ once: true }}
       className="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-shadow hover:shadow-md"
     >
-      <Link to={`/posts/${post._id}`} aria-label={`Open post by @${post.user?.username}`} className="block overflow-hidden">
-        <img
-          src={resolveImageUrl(post.image)}
-          alt={post.caption || "Post"}
-          loading="lazy"
-          className="aspect-square w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
-        />
+      <Link
+        to={`/posts/${post._id}`}
+        aria-label={`Open post by @${post.user?.username}`}
+        className="relative block overflow-hidden"
+      >
+        {isVideo ? (
+          <>
+            <video
+              src={resolveImageUrl(post.image)}
+              className="aspect-square w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+              muted
+              playsInline
+              preload="metadata"
+            />
+            <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-black/40">
+                <Play size={22} className="ml-0.5 text-white" fill="white" />
+              </div>
+            </div>
+          </>
+        ) : (
+          <img
+            src={resolveImageUrl(post.image)}
+            alt={post.caption || "Post"}
+            loading="lazy"
+            className="aspect-square w-full object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          />
+        )}
       </Link>
       <div className="p-4">
         <Link

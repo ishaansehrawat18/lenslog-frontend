@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from "react";
-import { UploadCloud, ImageOff } from "lucide-react";
+import { UploadCloud } from "lucide-react";
 
-function ImageUploader({ onFileSelect, initialPreview = null, label = "Upload image" }) {
+function ImageUploader({ onFileSelect, initialPreview = null, label = "Upload photo or video" }) {
   const [preview, setPreview] = useState(initialPreview);
+  const [isVideo, setIsVideo] = useState(false);
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef(null);
 
   const handleFile = (file) => {
     if (!file) return;
     onFileSelect(file);
+    setIsVideo(file.type.startsWith("video"));
     setPreview(URL.createObjectURL(file));
   };
 
@@ -49,7 +51,11 @@ function ImageUploader({ onFileSelect, initialPreview = null, label = "Upload im
       } ${preview ? "aspect-square" : "aspect-video"}`}
     >
       {preview ? (
-        <img src={preview} alt="Preview" className="h-full w-full object-cover" />
+        isVideo ? (
+          <video src={preview} className="h-full w-full object-cover" controls muted />
+        ) : (
+          <img src={preview} alt="Preview" className="h-full w-full object-cover" />
+        )
       ) : (
         <div className="flex flex-col items-center gap-2 py-10 text-gray-400">
           <UploadCloud size={32} strokeWidth={1.5} />
@@ -60,7 +66,7 @@ function ImageUploader({ onFileSelect, initialPreview = null, label = "Upload im
       <input
         ref={inputRef}
         type="file"
-        accept="image/png, image/jpeg, image/webp"
+        accept="image/png, image/jpeg, image/webp, video/mp4, video/quicktime, video/webm"
         onChange={handleChange}
         className="hidden"
       />
